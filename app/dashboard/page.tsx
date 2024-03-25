@@ -29,9 +29,9 @@ export default async function DashboardPage() {
         </ul>
       </div>
       <div>
-        <Link href={"/dragons"} className="font-semibold text-xl">
+        <Link href={"/dragon"} className="font-semibold text-xl">
           <div className="flex items-center">
-            Ir para pagina de dragões <ArrowBigRight className="w-6 h-7" />
+            Go to dragons page <ArrowBigRight className="w-6 h-7" />
           </div>
         </Link>
       </div>
