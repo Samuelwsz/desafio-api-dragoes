@@ -2,3 +2,6 @@
 
 
 https://www.youtube.com/watch?v=UqjJLhCm2-k&ab_channel=CandDev
+
+
+npm i react-hook-form zod @hookform/resolvers

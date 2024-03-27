@@ -5,7 +5,7 @@ interface CardProps {
   name: string
   type: string
   formattedDate: string
-  handleEdit: any
+  handleEdit: () => void
 }
 
 export function Card({ name, type, formattedDate, handleEdit }: CardProps) {
@@ -14,7 +14,10 @@ export function Card({ name, type, formattedDate, handleEdit }: CardProps) {
       <div className="absolute top-1 right-1">
         <div className="flex items-center">
           <div className="dark:text-slate-200 text-slate-800 flex items-center p-1 px-2 rounded-sm">
-            <Edit className="h-5 w-5 mr-3 cursor-pointer" onClick={handleEdit} />{" "}
+            <Edit
+              className="h-5 w-5 mr-3 cursor-pointer"
+              onClick={handleEdit}
+            />{" "}
             <Link href={"/dragon"}>
               <ArrowLeft className="h-5 w-5" />
             </Link>

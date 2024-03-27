@@ -3,30 +3,40 @@
 import axios from "axios"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+
+const schema = z.object({
+  name: z.string().min(1).max(255),
+  type: z.string().min(1).max(255),
+})
+
+type DragonSchema = z.infer<typeof schema>
 
 export default function CreateDragon() {
-  const [name, setName] = useState("")
-  const [type, setType] = useState("")
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<DragonSchema>({
+    resolver: zodResolver(schema),
+  })
 
-  const handleFormSubmit = async (e: any) => {
-    e.preventDefault()
-
+  const handleFormSubmit = async (data: DragonSchema) => {
     try {
       const response = await axios.post(
         "http://5c4b2a47aa8ee500142b4887.mockapi.io/api/v1/dragon",
-        {
-          name,
-          type,
-        }
+        data
       )
 
       console.log("Novo dragão criado:", response.data)
+      // Resetar o formulário após o envio bem-sucedido
+      reset()
     } catch (error) {
       console.error("Erro ao criar novo dragão:", error)
     }
-    setName("")
-    setType("")
   }
 
   return (
@@ -41,7 +51,7 @@ export default function CreateDragon() {
       </div>
 
       <form
-        onSubmit={handleFormSubmit}
+        onSubmit={handleSubmit(handleFormSubmit)}
         className="max-w-sm mx-auto bg-slate-400 shadow-md rounded px-8 pt-6 pb-8 my-4"
       >
         <div className="mb-4">
@@ -54,11 +64,18 @@ export default function CreateDragon() {
           <input
             id="name"
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:text-white dark:bg-slate-800"
+            {...register("name")}
+            className={`shadow appearance-none border rounded w-full py-2 px-3 dark:text-white leading-tight focus:outline-none focus:shadow-outline ${
+              errors.name ? "border-red-500" : ""
+            }`}
             placeholder="Enter the dragon's name"
           />
+          {errors.name && (
+            <p className="text-red-500 text-xs italic">
+              {" "}
+              {errors.name.message}{" "}
+            </p>
+          )}
         </div>
         <div className="mb-6">
           <label
@@ -70,11 +87,18 @@ export default function CreateDragon() {
           <input
             id="type"
             type="text"
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:text-white dark:bg-slate-800"
+            {...register("type")}
+            className={`shadow appearance-none border rounded w-full py-2 px-3 dark:text-white leading-tight focus:outline-none focus:shadow-outline ${
+              errors.type ? "border-red-500" : ""
+            }`}
             placeholder="Enter the type of dragon"
           />
+          {errors.type && (
+            <p className="text-red-500 text-xs italic">
+              {" "}
+              {errors.type.message}{" "}
+            </p>
+          )}
         </div>
         <div className="flex items-center justify-between">
           <button
