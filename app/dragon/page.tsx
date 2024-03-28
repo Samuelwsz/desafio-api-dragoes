@@ -23,13 +23,18 @@ export default function DragonsPage() {
         "http://5c4b2a47aa8ee500142b4887.mockapi.io/api/v1/dragon"
       )
       const data = await res.data
-      setDragons(data)
+
+      //filtra os dragões em ordem alfabetica
+      const sortedDragons = data.sort((a: DragonProps, b: DragonProps) =>
+        a.name.localeCompare(b.name)
+      )
+      setDragons(sortedDragons)
     } catch (error) {
       console.error("Erro ao buscar dados:", error)
     }
   }
 
-  const deleteDragon = async (id: string) => {
+   const deleteDragon = async (id: string) => {
     try {
       await axios.delete(
         `http://5c4b2a47aa8ee500142b4887.mockapi.io/api/v1/dragon/${id}`

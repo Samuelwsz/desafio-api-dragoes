@@ -15,6 +15,7 @@ export function Card({ name, type, formattedDate, handleEdit }: CardProps) {
         <div className="flex items-center">
           <div className="dark:text-slate-200 text-slate-800 flex items-center p-1 px-2 rounded-sm">
             <Edit
+              data-testid="edit-icon" // Aqui usamos getByTestId com o valor 'edit-icon'
               className="h-5 w-5 mr-3 cursor-pointer"
               onClick={handleEdit}
             />{" "}
