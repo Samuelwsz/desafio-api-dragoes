@@ -1,11 +1,11 @@
 "use client"
 
-import axios from "axios"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
+import { createDragon } from "@/lib/funtions"
 
 const schema = z.object({
   name: z.string().min(1).max(255),
@@ -24,20 +24,8 @@ export default function CreateDragon() {
     resolver: zodResolver(schema),
   })
 
-  const handleFormSubmit = async (data: DragonSchema) => {
-    try {
-      const response = await axios.post(
-        "http://5c4b2a47aa8ee500142b4887.mockapi.io/api/v1/dragon",
-        data
-      )
-
-      console.log("Novo dragão criado:", response.data)
-      // Resetar o formulário após o envio bem-sucedido
-      reset()
-    } catch (error) {
-      console.error("Erro ao criar novo dragão:", error)
-    }
-  }
+  // Função onSubmit para lidar com o envio do formulário
+  const onSubmit = (data: DragonSchema) => createDragon(data, reset)
 
   return (
     <>
@@ -51,7 +39,7 @@ export default function CreateDragon() {
       </div>
 
       <form
-        onSubmit={handleSubmit(handleFormSubmit)}
+        onSubmit={handleSubmit(onSubmit)}
         className="max-w-sm mx-auto bg-slate-400 shadow-md rounded px-8 pt-6 pb-8 my-4"
       >
         <div className="mb-4">

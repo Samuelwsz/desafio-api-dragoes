@@ -1,50 +1,11 @@
 "use client"
 
-import axios from "axios"
+import { DragonProps, FecthDragons } from "@/lib/funtions"
 import { ArrowRight, X } from "lucide-react"
 import Link from "next/link"
-import { useEffect, useState } from "react"
-
-interface DragonProps {
-  id: string
-  name: string
-}
 
 export default function DragonsPage() {
-  const [dragons, setDragons] = useState<DragonProps[]>([])
-
-  useEffect(() => {
-    fetchData()
-  }, [])
-
-  const fetchData = async () => {
-    try {
-      const res = await axios.get(
-        "http://5c4b2a47aa8ee500142b4887.mockapi.io/api/v1/dragon"
-      )
-      const data = await res.data
-
-      //filtra os dragões em ordem alfabetica
-      const sortedDragons = data.sort((a: DragonProps, b: DragonProps) =>
-        a.name.localeCompare(b.name)
-      )
-      setDragons(sortedDragons)
-    } catch (error) {
-      console.error("Erro ao buscar dados:", error)
-    }
-  }
-
-   const deleteDragon = async (id: string) => {
-    try {
-      await axios.delete(
-        `http://5c4b2a47aa8ee500142b4887.mockapi.io/api/v1/dragon/${id}`
-      )
-      // Atualize a lista de dragões após a exclusão
-      setDragons(dragons.filter((dragon) => dragon.id !== id))
-    } catch (error) {
-      console.error("Erro ao deletar dragão:", error)
-    }
-  }
+  const { dragons, deleteDragon } = FecthDragons()
 
   return (
     <>
@@ -92,21 +53,4 @@ export default function DragonsPage() {
       </div>
     </>
   )
-}
-
-{
-  /*  const deleteDragon = async (id: string) => {
-    try {
-      await fetch(
-        `http://5c4b2a47aa8ee500142b4887.mockapi.io/api/v1/dragon/${id}`,
-        {
-          method: "DELETE",
-        }
-      )
-      // Atualize a lista de dragões após a exclusão
-      setDragons(dragons.filter((dragon) => dragon.id !== id))
-    } catch (error) {
-      console.error("Erro ao deletar dragão:", error)
-    }
-  }*/
 }
